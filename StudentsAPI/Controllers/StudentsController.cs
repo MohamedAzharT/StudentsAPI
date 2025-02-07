@@ -62,6 +62,7 @@ namespace StudentsAPI.Controllers
                 return BadRequest();
             }
             var existingStudent = _studentService.GetStudentBySRN(srn);
+
             if (existingStudent == null)
             {
                 return NotFound(new { message = "Student not found" });
