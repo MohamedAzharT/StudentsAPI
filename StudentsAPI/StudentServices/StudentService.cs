@@ -37,6 +37,7 @@ namespace StudentsAPI.StudentServices
             }
 
             existingStudent.Name = updatedStudent.Name;
+            existingStudent.Password = updatedStudent.Password;
             existingStudent.Department = updatedStudent.Department;
             existingStudent.Age = updatedStudent.Age;
             existingStudent.Email = updatedStudent.Email;
