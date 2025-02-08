@@ -45,5 +45,19 @@ namespace StudentsAPI.StudentServices
             _context.StudentInfo.Update(existingStudent);
             _context.SaveChanges();
         }
+
+        public Student? Authenticate(string name, string password)
+        {
+            // Check if a student exists with the given Name and Password
+            var student = _context.StudentInfo.FirstOrDefault(s => s.Name == name && s.Password == password);
+
+            if (student == null)
+            {
+                return null; // Return null if credentials don't match
+            }
+
+            return student; // Return student if credentials are valid
+        }
+
     }
 }

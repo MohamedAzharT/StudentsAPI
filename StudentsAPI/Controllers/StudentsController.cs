@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentsAPI.DataModels;
 using StudentsAPI.StudentServices;
@@ -7,6 +8,7 @@ namespace StudentsAPI.Controllers
 {
     [Route("api/Students")]
     [ApiController]
+    [Authorize]
     public class StudentsController : ControllerBase
     {
         private readonly StudentService _studentService;
