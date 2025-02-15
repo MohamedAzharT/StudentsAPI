@@ -1,36 +1,39 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using StudentsAPI.DataModels;
-using StudentsAPI.StudentServices;
+using StudentsAPI.StudentServices.Implementations;
+using StudentsAPI.StudentServices.Interfaces;
 
 namespace StudentsAPI.Controllers
 {
     [Route("api/Students")]
     [ApiController]
+    
     public class StudentsController : ControllerBase
     {
-        private readonly StudentService _studentService;
+        private readonly IStudentService _studentService;
 
         // Constructor to inject the StudentService
-        public StudentsController(StudentService studentService)
+        public StudentsController(IStudentService studentService)
         {
             _studentService = studentService;
         }
 
         [HttpGet]
         [Route("GetallStudents")]
-        public ActionResult<List<Student>> GetStudentslist()
+        public async Task<ActionResult<List<Student>>> GetStudentslist()
         {
-            var students = _studentService.GetAllStudents();
+            var students =await _studentService.GetAllStudents();
             return Ok(students);
         }
 
         [HttpGet]
         [Route("GetStudentById/{srn}")]
 
-        public ActionResult<Student> GetStudentBySRN(int srn)
+        public async Task<ActionResult<Student>> GetStudentBySRN(int srn)
         {
-            var student = _studentService.GetStudentBySRN(srn);
+            var student = await _studentService.GetStudentBySRN(srn);
 
             if (student == null)
             {
@@ -42,33 +45,33 @@ namespace StudentsAPI.Controllers
         [HttpPost]
         [Route("AddStudent")]
 
-        public IActionResult AddStudent([FromBody] Student newStudent)
+        public async Task<IActionResult> AddStudent([FromBody] Student newStudent)
         {
             if(newStudent == null)
             {
                 return BadRequest();
             }
-            _studentService.AddStudent(newStudent);
+           await _studentService.AddStudent(newStudent);
             return Ok(new {message = "Student Record Added Successfully"});
         }
 
         [HttpPut]
         [Route("UpdateStudent/{srn}")]
 
-        public IActionResult UpdateStudent(int srn, [FromBody] Student updateStudent)
+        public async Task<IActionResult> UpdateStudent(int srn, [FromBody] Student updateStudent)
         {
             if (updateStudent == null)
             {
                 return BadRequest();
             }
-            var existingStudent = _studentService.GetStudentBySRN(srn);
+            var existingStudent =await _studentService.GetStudentBySRN(srn);
 
             if (existingStudent == null)
             {
                 return NotFound(new { message = "Student not found" });
             }
 
-            _studentService.UpdateStudent(srn, updateStudent);
+           await _studentService.UpdateStudent(srn, updateStudent);
 
             return Ok(new { message = "Student record updated successfully" });
         }
